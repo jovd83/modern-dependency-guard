@@ -59,6 +59,9 @@ This file acts as the primary reference guide for the `modern-stack-enforcer` ag
 | Deprecated / Avoid | Modern Alternative | Reasoning / Context |
 | :----------------- | :----------------- | :------------------ |
 | `PhantomJS` / `CasperJS`| `Playwright`, `Puppeteer` | PhantomJS is suspended and obsolete. Playwright is currently the gold standard for E2E and browser automation. |
+| `Protractor`       | `Cypress`, `Playwright` | Reached official End-of-Life in 2023. The Angular team officially recommends migrating to modern E2E frameworks like Cypress or Playwright. |
+| `Karma`            | `Web Test Runner`, `Vitest`, `Jest` | Deprecated and phased out by Angular. Experimental Vitest support introduced in newer Angular versions. |
+| `Enzyme`           | `React Testing Library` (RTL) | Enzyme is dead and has no official React 18+ adapter. RTL is the official React recommendation and tests user behavior rather than implementation details. |
 | `Jasmine`          | `Jest`, `Vitest` | `Vitest` provides native ESM support and exceptional speed, heavily outperforming legacy test runners. |
 | `fluentlenium`     | `Selenide`, `Playwright` | FluentLenium official maintenance ends in 2025. Projects should migrate to Selenide (if Selenium bindings are required) or Playwright. |
 | `silktide`         | `Axe-core`, `Playwright` (for devs) | Silktide is an enterprise governance platform, not a developer testing framework. For CI/CD automated accessibility testing, `axe-core` is the open-source standard. |
@@ -68,6 +71,7 @@ This file acts as the primary reference guide for the `modern-stack-enforcer` ag
 | Deprecated / Avoid | Modern Alternative | Reasoning / Context |
 | :----------------- | :----------------- | :------------------ |
 | `unitils`          | `Mockito` / `Testcontainers` | Abandoned over a decade ago. Does not support modern Java versions. Mockito natively handles mock injection today. |
+| `PowerMock`        | `Mockito` (`mockito-inline`) | PowerMock is unmaintained and causes severe issues with modern JDKs (Java 17/21). Mockito natively supports mocking static and final methods now, making PowerMock obsolete. |
 | `dbunit`           | `Testcontainers` + `@Sql` / `Database Rider` | Using rigid XML files for test data is a legacy pattern. Modern standard is spinning up ephemeral databases via Testcontainers and using native SQL script initialization, or Database Rider if JUnit 5 integration for DbUnit is strictly required. |
 | `JUnit 4`          | `JUnit 5 (Jupiter)` | JUnit 4 is in legacy maintenance mode. JUnit 5 is the modern, modular standard bringing extensive features like parameterized tests and dynamic tests that JUnit 4 lacks. |
 | `easymock` / `jmock` / `mock4j`| `Mockito` | EasyMock and jMock use an older record-replay model and have lost mindshare. Mockito is the industry standard (used by Spring Boot by default) with an intuitive `when-then` API. `mock4j` is essentially non-existent. |
