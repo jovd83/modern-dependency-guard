@@ -60,6 +60,9 @@ This file acts as the primary reference guide for the `modern-stack-enforcer` ag
 | :----------------- | :----------------- | :------------------ |
 | `PhantomJS` / `CasperJS`| `Playwright`, `Puppeteer` | PhantomJS is suspended and obsolete. Playwright is currently the gold standard for E2E and browser automation. |
 | `Jasmine`          | `Jest`, `Vitest` | `Vitest` provides native ESM support and exceptional speed, heavily outperforming legacy test runners. |
+| `fluentlenium`     | `Selenide`, `Playwright` | FluentLenium official maintenance ends in 2025. Projects should migrate to Selenide (if Selenium bindings are required) or Playwright. |
+| `silktide`         | `Axe-core`, `Playwright` (for devs) | Silktide is an enterprise governance platform, not a developer testing framework. For CI/CD automated accessibility testing, `axe-core` is the open-source standard. |
+| **Active/Modern:** | `Pact` | Pact is the ongoing industry standard for Consumer-Driven Contract Testing in microservices. Highly recommended. |
 
 ### Java / JVM Testing
 | Deprecated / Avoid | Modern Alternative | Reasoning / Context |
@@ -67,3 +70,6 @@ This file acts as the primary reference guide for the `modern-stack-enforcer` ag
 | `unitils`          | `Mockito` / `Testcontainers` | Abandoned over a decade ago. Does not support modern Java versions. Mockito natively handles mock injection today. |
 | `dbunit`           | `Testcontainers` + `@Sql` / `Database Rider` | Using rigid XML files for test data is a legacy pattern. Modern standard is spinning up ephemeral databases via Testcontainers and using native SQL script initialization, or Database Rider if JUnit 5 integration for DbUnit is strictly required. |
 | `JUnit 4`          | `JUnit 5 (Jupiter)` | JUnit 4 is in legacy maintenance mode. JUnit 5 is the modern, modular standard bringing extensive features like parameterized tests and dynamic tests that JUnit 4 lacks. |
+| `easymock` / `jmock` / `mock4j`| `Mockito` | EasyMock and jMock use an older record-replay model and have lost mindshare. Mockito is the industry standard (used by Spring Boot by default) with an intuitive `when-then` API. `mock4j` is essentially non-existent. |
+| `jbehave`          | `Cucumber` | JBehave has falling adoption and is no longer supported by modern wrappers like Serenity. Cucumber is the modern standard for BDD with superior multi-language and IDE support. |
+| **Active/Modern:** | `Mockito` | Mockito is the current, actively maintained gold standard for mocking in Java. |
