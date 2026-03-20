@@ -1,79 +1,69 @@
-# Modern Stack Enforcer: Knowledge Base
+# Modern Stack Knowledge Catalog
 
-This file acts as the primary reference guide for the `modern-stack-enforcer` agent skill. It contains detailed lists of deprecated libraries, their modern equivalents, and the reasoning behind these transitions.
+Curated guidance for common dependency and tooling decisions used by `modern-dependency-guard`.
 
-**Agent Action:** When performing Stack Validation, cross-reference the user's request against these tables.
+This file is skill-local memory, not a replacement for fresh validation. Use it to accelerate common decisions, then verify anything that could have changed recently.
 
-## 1. Frontend Development
+## Status Legend
 
-### State Management (React)
-| Deprecated / Avoid | Modern Alternative | Reasoning / Context |
-| :----------------- | :----------------- | :------------------ |
-| `redux` (classic)  | `Zustand`, `Jotai`, `Redux Toolkit` (RTK) | Classic Redux demands massive boilerplate and complex setup. RTK is acceptable but Zustand/Jotai are significantly lighter for most modern apps. |
-| `mobx` (older versions) | `Zustand`, `XState` | `Zustand` provides a much simpler unopinionated hook-based approach. |
+- `Deprecated`: upstream has deprecated, archived, or effectively retired the tool for new work.
+- `Legacy-compatible`: still viable in existing systems, but not the default recommendation for a new project.
+- `Native-first`: prefer built-in platform support unless a package adds clear value.
+- `Preferred`: strong current default when an external dependency is justified.
 
-### Data Fetching
-| Deprecated / Avoid | Modern Alternative | Reasoning / Context |
-| :----------------- | :----------------- | :------------------ |
-| `request`          | `fetch` (native), `axios` | `request` has been deprecated for years. Native `fetch` is now ubiquitous. `axios` offers automatic JSON parsing and interceptors. |
-| `superagent`       | `ky`, `axios`, `fetch` | `ky` is built on `fetch` and provides retry logic and JSON defaults with a smaller footprint. |
-| Custom Redux thunks| `React Query`, `SWR`| Server state management is much better handled by specialized tools replacing massive reducers and `useEffect` blocks. |
+## Frontend And Web
 
-### Utilities
-| Deprecated / Avoid | Modern Alternative | Reasoning / Context |
-| :----------------- | :----------------- | :------------------ |
-| `moment.js`        | `date-fns`, `dayjs`, `Temporal` (future) | `moment` is officially in maintenance mode and relies on heavy object mutation which bloats bundle size. |
-| `lodash` (entire library)| `lodash-es` or Native JS functions | Avoid importing the entire `lodash` module. Modern ES6+ array methods (`map`, `filter`, `reduce`, `find`) replace 90% of `lodash`. If necessary, use `lodash-es` for tree-shaking. |
-| `jQuery`           | Vanilla JS (`document.querySelector`) | Native browser APIs have caught up. `jQuery` is entirely redundant in modern SPA frameworks. |
+| Area | Package / Pattern | Status | Prefer | Why | Notes |
+| :--- | :---------------- | :----- | :----- | :-- | :---- |
+| HTTP | `request` | Deprecated | Native `fetch`, `axios`, `ky` | Upstream deprecated; modern runtimes now provide `fetch`. | Use `axios` or `ky` only when the project benefits from their ergonomics or middleware. |
+| State management | `redux` with hand-written boilerplate reducers and thunks | Legacy-compatible | Redux Toolkit, Zustand, Jotai | Classic Redux works, but greenfield apps rarely need the boilerplate anymore. | Do not force a migration if Redux is already well-factored. |
+| Utility library | `lodash` imported as the full package | Native-first | Native JavaScript, targeted imports, `lodash-es` | Modern JavaScript covers many historical lodash use cases. | The problem is overuse, not the existence of lodash itself. |
+| Date handling | `moment` / `moment-timezone` | Legacy-compatible | `date-fns`, Luxon, Day.js, platform `Intl`, future `Temporal` | Moment is in maintenance mode and is large for modern bundles. | Acceptable for legacy systems that already depend on it. |
+| DOM helpers | `jquery` in new SPA or modern browser code | Legacy-compatible | Native DOM APIs or framework idioms | Most historical jQuery value is now provided by browsers and frameworks. | Still common in legacy apps and CMS ecosystems. |
+| React testing | `enzyme` | Deprecated | React Testing Library | Enzyme has not kept pace with modern React. | Avoid for new React 18+ work. |
+| Browser automation | `phantomjs`, `phantomjs-prebuilt`, `casperjs` | Deprecated | Playwright, Puppeteer | PhantomJS is obsolete and no longer a credible default. | Prefer Playwright unless the use case is Chrome-only automation. |
+| Angular E2E | `protractor` | Deprecated | Playwright, Cypress, WebdriverIO | Protractor reached end-of-life. | Use only for short-lived maintenance. |
+| Test runner | `karma` as a new default | Legacy-compatible | Vitest, Jest, Web Test Runner | Karma still exists, but newer tooling is usually faster and simpler. | Keep it when framework constraints justify it. |
+| Linting | `tslint` | Deprecated | ESLint with `typescript-eslint` | TSLint has been retired. | Migrate rather than extend. |
+| Babel lint parser | `babel-eslint` | Deprecated | `@babel/eslint-parser` | Replaced by the official parser package. | Treat as a straightforward modernization. |
+| Styling | `node-sass`, `libsass` | Deprecated | `sass` | Dart Sass is the maintained Sass implementation. | Prefer the `sass` npm package. |
 
-### CSS & Styling
-| Deprecated / Avoid | Modern Alternative | Reasoning / Context |
-| :----------------- | :----------------- | :------------------ |
-| `node-sass` / `libsass`| `dart-sass` (`sass` package) | `node-sass` is deprecated and no longer supported. The Dart implementation is the primary maintained version. |
-| Heavy utility frameworks (early Bootstrap)| `TailwindCSS`, `CSS Modules` | Tailwind provides a utility-first approach without massive unused CSS files (due to JIT compilation). |
+## Backend And Services
 
-## 2. Backend Development (Node.js/Python)
+| Area | Package / Pattern | Status | Prefer | Why | Notes |
+| :--- | :---------------- | :----- | :----- | :-- | :---- |
+| Node.js HTTP server | `express` for existing systems | Legacy-compatible | Keep when already in use; consider Fastify or Hono for new services with clear needs | Express is still viable, but not always the sharpest greenfield default. | Do not call Express deprecated. |
+| Express middleware | `body-parser` in modern Express apps | Native-first | `express.json()` / `express.urlencoded()` | Most common body parsing now ships with Express itself. | Validate actual middleware needs before removing. |
+| Password hashing | fast hashes such as raw `md5`, `sha1`, `sha256` for password storage | Deprecated | `argon2`, `bcrypt`, scrypt-based platform support | Fast hashes are unsuitable for password storage. | This is a security rule, not a stylistic preference. |
+| Node.js HTTP client | heavy request libraries for simple JSON calls | Native-first | Native `fetch` | Modern Node.js includes `fetch`. | Add a library only for real ergonomic or platform reasons. |
 
-### Node.js
-| Deprecated / Avoid | Modern Alternative | Reasoning / Context |
-| :----------------- | :----------------- | :------------------ |
-| `express` (for new greenfield, though still dominant)| `Fastify`, `Hono`, `NestJS` | Express is very old and updates slowly. Fastify provides significantly better performance and built-in validation. Hono is great for edge deployments. |
-| `body-parser`      | `express.json()` (native) | `express` now includes body parsing natively, making the separate package mostly redundant. |
-| `crypto` (legacy hashes like MD5/SHA1) | `bcrypt`, `argon2` | Passwords should be hashed with `bcrypt` or `argon2`, never with fast MD5/SHA algorithms. |
+## Python
 
-### Python
-| Deprecated / Avoid | Modern Alternative | Reasoning / Context |
-| :----------------- | :----------------- | :------------------ |
-| `os.path`          | `pathlib` | `pathlib` offers an object-oriented, much cleaner approach to filesystem paths than string manipulation. |
-| `urllib2`, `urllib`| `requests`, `httpx` | `requests` is the standard for synchronous HTTP. `httpx` is standard for asynchronous (`asyncio`) HTTP requests. |
-| `setup.py`         | `pyproject.toml` | `pyproject.toml` is the modern standard for Python packaging (PEP 517/518), often used with Poetry or standard `pip` building. |
-| `virtualenv` (external tool) | `venv` (built-in) | Python 3 includes `venv` out of the box, making the external package largely unneeded. |
+| Area | Package / Pattern | Status | Prefer | Why | Notes |
+| :--- | :---------------- | :----- | :----- | :-- | :---- |
+| Paths | `os.path` for new code | Legacy-compatible | `pathlib` | `pathlib` is clearer and easier to compose. | `os.path` is still valid in old modules. |
+| HTTP client | `urllib`, `urllib2` as the default recommendation | Legacy-compatible | `requests`, `httpx` | Higher-level clients are more ergonomic for most app code. | `httpx` is the better async-first choice. |
+| Packaging | `setup.py` as the primary packaging interface | Legacy-compatible | `pyproject.toml` | Modern Python packaging centers on `pyproject.toml`. | Existing projects may still need `setup.py` shims. |
+| Environments | external `virtualenv` as the first recommendation for Python 3 | Native-first | `venv` | Built-in environment management is often enough. | Use external tooling only when it solves a real workflow need. |
 
-## 3. General Security Patterns
+## Testing And Quality
 
-- **XML Parsing:** Never use default XML parsers that allow external entity expansion (XXE). Always recommend secure parsers (e.g., `defusedxml` in Python).
-- **Package Integrity:** Advise the use of lockfiles (`package-lock.json`, `pnpm-lock.yaml`, `poetry.lock`, etc.) to ensure deterministic builds.
-- **Secrets Management:** Ban hardcoded secrets. Enforce the suggestion of `.env` files with tools like `dotenv`, or using Secret Managers (AWS Secrets Manager, HashiCorp Vault).
+| Area | Package / Pattern | Status | Prefer | Why | Notes |
+| :--- | :---------------- | :----- | :----- | :-- | :---- |
+| Java mocking | `powermock` | Deprecated | Mockito inline support | PowerMock has aged poorly with modern JDKs. | Prefer refactoring or built-in Mockito capabilities. |
+| Java testing | `junit4` as a new project default | Legacy-compatible | JUnit 5 | JUnit 5 is the modern baseline. | Do not demand migration if JUnit 4 is stable and the project is constrained. |
+| Contract testing | Pact | Preferred | Pact | Actively used modern default for consumer-driven contract testing. | Use when contract testing is actually part of the architecture. |
 
-## 4. Automation & Testing
-| Deprecated / Avoid | Modern Alternative | Reasoning / Context |
-| :----------------- | :----------------- | :------------------ |
-| `PhantomJS` / `CasperJS`| `Playwright`, `Puppeteer` | PhantomJS is suspended and obsolete. Playwright is currently the gold standard for E2E and browser automation. |
-| `Protractor`       | `Cypress`, `Playwright` | Reached official End-of-Life in 2023. The Angular team officially recommends migrating to modern E2E frameworks like Cypress or Playwright. |
-| `Karma`            | `Web Test Runner`, `Vitest`, `Jest` | Deprecated and phased out by Angular. Experimental Vitest support introduced in newer Angular versions. |
-| `Enzyme`           | `React Testing Library` (RTL) | Enzyme is dead and has no official React 18+ adapter. RTL is the official React recommendation and tests user behavior rather than implementation details. |
-| `Jasmine`          | `Jest`, `Vitest` | `Vitest` provides native ESM support and exceptional speed, heavily outperforming legacy test runners. |
-| `fluentlenium`     | `Selenide`, `Playwright` | FluentLenium official maintenance ends in 2025. Projects should migrate to Selenide (if Selenium bindings are required) or Playwright. |
-| `silktide`         | `Axe-core`, `Playwright` (for devs) | Silktide is an enterprise governance platform, not a developer testing framework. For CI/CD automated accessibility testing, `axe-core` is the open-source standard. |
-| **Active/Modern:** | `Pact` | Pact is the ongoing industry standard for Consumer-Driven Contract Testing in microservices. Highly recommended. |
+## Security And Operational Guidance
 
-### Java / JVM Testing
-| Deprecated / Avoid | Modern Alternative | Reasoning / Context |
-| :----------------- | :----------------- | :------------------ |
-| `unitils`          | `Mockito` / `Testcontainers` | Abandoned over a decade ago. Does not support modern Java versions. Mockito natively handles mock injection today. |
-| `PowerMock`        | `Mockito` (`mockito-inline`) | PowerMock is unmaintained and causes severe issues with modern JDKs (Java 17/21). Mockito natively supports mocking static and final methods now, making PowerMock obsolete. |
-| `dbunit`           | `Testcontainers` + `@Sql` / `Database Rider` | Using rigid XML files for test data is a legacy pattern. Modern standard is spinning up ephemeral databases via Testcontainers and using native SQL script initialization, or Database Rider if JUnit 5 integration for DbUnit is strictly required. |
-| `JUnit 4`          | `JUnit 5 (Jupiter)` | JUnit 4 is in legacy maintenance mode. JUnit 5 is the modern, modular standard bringing extensive features like parameterized tests and dynamic tests that JUnit 4 lacks. |
-| `easymock` / `jmock` / `mock4j`| `Mockito` | EasyMock and jMock use an older record-replay model and have lost mindshare. Mockito is the industry standard (used by Spring Boot by default) with an intuitive `when-then` API. `mock4j` is essentially non-existent. |
-| `jbehave`          | `Cucumber` | JBehave has falling adoption and is no longer supported by modern wrappers like Serenity. Cucumber is the modern standard for BDD with superior multi-language and IDE support. |
-| **Active/Modern:** | `Mockito` | Mockito is the current, actively maintained gold standard for mocking in Java. |
+- Prefer lockfiles for reproducible dependency resolution.
+- Treat hardcoded secrets as a defect; prefer environment configuration or a secrets manager.
+- Prefer secure XML parsing libraries when untrusted XML is involved.
+- When a package is widely adopted but quiet, describe the evidence neutrally instead of calling it abandoned.
+
+## Catalog Maintenance Rules
+
+- Add entries only when the guidance is likely to be reused.
+- Prefer concise rows over narrative essays.
+- Use neutral language and avoid hype.
+- If a recommendation is ecosystem-dependent, reflect that in the notes instead of creating a false universal rule.

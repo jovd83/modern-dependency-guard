@@ -1,0 +1,10 @@
+{
+  "name": "modern-app",
+  "private": true,
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.0"
+  }
+}

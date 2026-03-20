@@ -1,0 +1,7 @@
+interface:
+  display_name: "Modern Dependency Guard"
+  short_description: "Validate and modernize dependency choices"
+  default_prompt: "Use $modern-dependency-guard to validate proposed libraries, replace outdated dependencies, and justify a modern stack recommendation."
+
+policy:
+  allow_implicit_invocation: true

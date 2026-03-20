@@ -1,0 +1,12 @@
+{
+  "name": "legacy-app",
+  "private": true,
+  "dependencies": {
+    "moment": "^2.30.0",
+    "request": "^2.88.2"
+  },
+  "devDependencies": {
+    "node-sass": "^9.0.0",
+    "tslint": "^6.1.3"
+  }
+}
