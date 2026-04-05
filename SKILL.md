@@ -214,6 +214,16 @@ If the evidence is mixed, prefer adding a cautious note rather than a hard rule.
 - If native support varies by runtime version, call out the version dependency.
 - If modern alternatives are heavier than the user needs, recommend the smallest acceptable option.
 
+## Gotchas
+
+- **Native Version Drift**: Recommending a "native" replacement (e.g., Node.js `fetch` or Python `pathlib`) requires verifying the *target environment's* version. Platform-native features are often version-gated.
+- **Transitive Maintenance Gap**: A "modern" top-level dependency may still rely on unmaintained or legacy transitive dependencies. Review the full dependency graph if the project has strict security or maintenance requirements.
+- **False Positives on "Abandoned" Status**: Mature, feature-complete utility libraries (e.g., `mime`, `ms`, or small math utilities) may have no recent releases because they are stable, not because they are abandoned. Distinguish between "finished" and "dead."
+- **Private Registry Blind Spots**: CLI tools like `npm view` or `gh repo view` may fail or return incomplete data if the target project uses a private registry or internal source control without configured credentials in the agent's environment.
+- **"Modern" != "Efficient"**: Moving to a modern alternative (e.g., `date-fns` over `moment`) only improves performance if implemented correctly (e.g., using tree-shakeable imports). Blindly swapping packages without checking implementation can sometimes increase bundle size or decrease performance.
+- **Lockfile Desync**: Running `npm view` or checking `package-json` alone doesn't account for what is actually installed in a `node_modules` folder or pinned in a lockfile. Always cross-reference with the project's lockfile when precise version auditing is required.
+
+
 ## Examples
 
 ### Example: native first in Node.js
