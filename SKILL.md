@@ -4,8 +4,15 @@ description: Review, validate, and modernize technology choices before suggestin
 metadata:
   author: jovd83
   version: 1.0.0
+  dispatcher-output-artifacts: dependency_review, modernization_recommendations, manifest_findings
+  dispatcher-risk: low
+  dispatcher-writes-files: false
+  dispatcher-input-artifacts: package_manifest, dependency_request, repository_context, technology_constraints
+  dispatcher-capabilities: dependency-review, stack-modernization, manifest-analysis
+  dispatcher-stack-tags: analysis, dependencies, architecture
+  dispatcher-accepted-intents: review_dependencies, modernize_dependency_choices, scan_package_manifest
+  dispatcher-category: analysis
 ---
-
 # Modern Dependency Guard
 
 Choose modern, maintainable, appropriately scoped technology with evidence.
