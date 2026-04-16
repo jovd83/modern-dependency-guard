@@ -2,8 +2,10 @@
 name: modern-dependency-guard
 description: Review, validate, and modernize technology choices before suggesting code that depends on external packages, frameworks, SDKs, CLIs, or hosted services. Use when Codex must choose a stack, sanity-check a requested dependency, replace deprecated tooling, explain safer modern alternatives, or scan a Node.js package manifest for outdated choices.
 metadata:
+    dispatcher-layer: execution
+    dispatcher-lifecycle: active
   author: jovd83
-  version: 1.0.0
+  version: 1.1.0
   dispatcher-output-artifacts: dependency_review, modernization_recommendations, manifest_findings
   dispatcher-risk: low
   dispatcher-writes-files: false
@@ -18,6 +20,12 @@ metadata:
 Choose modern, maintainable, appropriately scoped technology with evidence.
 
 This skill is for dependency and tooling decisions, not for broad architecture invention. Use it to prevent stale recommendations, tighten stack choices, and explain why a recommendation is safer or more current.
+
+
+## Telemetry & Logging
+> [!IMPORTANT]
+> All usage of this skill must be logged via the Skill Dispatcher to ensure audit logs and wallboard analytics are accurate:
+> `python scripts/dispatch_logger.py --skill <skill_name> --intent <intent> --reason <reason>`
 
 ## Operating Principles
 
