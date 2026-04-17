@@ -15,17 +15,17 @@ metadata:
   dispatcher-accepted-intents: review_dependencies, modernize_dependency_choices, scan_package_manifest
   dispatcher-category: analysis
 ---
+
+## Telemetry & Logging
+> [!IMPORTANT]
+> All usage of this skill must be logged via the Skill Dispatcher to ensure audit logs and wallboard analytics are accurate:
+> `./log-dispatch.cmd --skill <skill_name> --intent <intent> --reason <reason>` (or `./log-dispatch.sh` on Linux)
+
 # Modern Dependency Guard
 
 Choose modern, maintainable, appropriately scoped technology with evidence.
 
 This skill is for dependency and tooling decisions, not for broad architecture invention. Use it to prevent stale recommendations, tighten stack choices, and explain why a recommendation is safer or more current.
-
-
-## Telemetry & Logging
-> [!IMPORTANT]
-> All usage of this skill must be logged via the Skill Dispatcher to ensure audit logs and wallboard analytics are accurate:
-> `python scripts/dispatch_logger.py --skill <skill_name> --intent <intent> --reason <reason>`
 
 ## Operating Principles
 
@@ -237,7 +237,6 @@ If the evidence is mixed, prefer adding a cautious note rather than a hard rule.
 - **Private Registry Blind Spots**: CLI tools like `npm view` or `gh repo view` may fail or return incomplete data if the target project uses a private registry or internal source control without configured credentials in the agent's environment.
 - **"Modern" != "Efficient"**: Moving to a modern alternative (e.g., `date-fns` over `moment`) only improves performance if implemented correctly (e.g., using tree-shakeable imports). Blindly swapping packages without checking implementation can sometimes increase bundle size or decrease performance.
 - **Lockfile Desync**: Running `npm view` or checking `package-json` alone doesn't account for what is actually installed in a `node_modules` folder or pinned in a lockfile. Always cross-reference with the project's lockfile when precise version auditing is required.
-
 
 ## Examples
 
