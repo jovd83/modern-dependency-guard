@@ -2,7 +2,7 @@
 name: modern-dependency-guard
 description: Review, validate, and modernize technology choices before suggesting code that depends on external packages, frameworks, SDKs, CLIs, or hosted services. Use when Codex must choose a stack, sanity-check a requested dependency, replace deprecated tooling, explain safer modern alternatives, or scan a Node.js package manifest for outdated choices.
 metadata:
-  dispatcher-layer: execution
+  dispatcher-layer: feedback
   dispatcher-lifecycle: active
   author: jovd83
   version: 1.1.0
