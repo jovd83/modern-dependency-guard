@@ -1,11 +1,9 @@
 ---
 name: modern-dependency-guard
-description: Review, validate, and modernize technology choices before suggesting code that depends on external packages, frameworks, SDKs, CLIs, or hosted services. Use when Codex must choose a stack, sanity-check a requested dependency, replace deprecated tooling, explain safer modern alternatives, or scan a Node.js package manifest for outdated choices.
+description: Review, validate, and modernize technology choices before suggesting code that depends on external packages, frameworks, SDKs, CLIs, or hosted services. Use to choose a stack, sanity-check dependencies, replace deprecated tools, suggest modern alternatives, or scan a Node.js package manifest.
 metadata:
   dispatcher-layer: feedback
   dispatcher-lifecycle: active
-  author: jovd83
-  version: 1.1.0
   dispatcher-output-artifacts: dependency_review, modernization_recommendations, manifest_findings
   dispatcher-risk: low
   dispatcher-writes-files: false
@@ -14,14 +12,18 @@ metadata:
   dispatcher-stack-tags: analysis, dependencies, architecture
   dispatcher-accepted-intents: review_dependencies, modernize_dependency_choices, scan_package_manifest
   dispatcher-category: analysis
+
 ---
 
 ## Telemetry & Logging
 > [!IMPORTANT]
 > All usage of this skill must be logged via the Skill Dispatcher to ensure audit logs and wallboard analytics are accurate:
-> `./log-dispatch.cmd --skill <skill_name> --intent <intent> --reason <reason>` (or `./log-dispatch.sh` on Linux)
+> `./log-dispatch.cmd --skill <skill_name> --intent <intent> --model <model_name> --reason <reason>` (or `./log-dispatch.sh` on Linux)
 
 # Modern Dependency Guard
+
+> **Author:** jovd83 | **Version:** 1.1.1
+
 
 Choose modern, maintainable, appropriately scoped technology with evidence.
 
