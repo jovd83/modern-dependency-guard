@@ -1,6 +1,7 @@
 ---
 name: modern-dependency-guard
 description: Review, validate, and modernize technology choices before suggesting code that depends on external packages, frameworks, SDKs, CLIs, or hosted services. Use to choose a stack, sanity-check dependencies, replace deprecated tools, suggest modern alternatives, or scan a Node.js package manifest.
+context: fork
 metadata:
   dispatcher-layer: feedback
   dispatcher-lifecycle: active
@@ -17,12 +18,22 @@ metadata:
 
 # Modern Dependency Guard
 
-> **Author:** jovd83 | **Version:** 1.1.1
+> **Author:** jovd83 | **Version:** 1.2.0
 
 
 Choose modern, maintainable, appropriately scoped technology with evidence.
 
 This skill is for dependency and tooling decisions, not for broad architecture invention. Use it to prevent stale recommendations, tighten stack choices, and explain why a recommendation is safer or more current.
+
+## Forked Run
+
+In Claude Code this skill runs in a forked subagent (`context: fork`). It starts without the conversation history and cannot ask the user anything mid-run, so:
+
+- Take the target, scope and output location from the invocation arguments. When one is missing, use the defaults in this file and state the assumption in the result instead of asking.
+- Keep verbose tool output (scanner logs, file dumps) inside this run. When the report is long, write it to the output location this file defines, or to a file you name in the result.
+- End with a final message the main conversation can act on: the verdict or summary, the most important findings, and the path of every file written.
+
+Other harnesses load this file inline; there the workflow below applies unchanged, including any questions it asks.
 
 ## Operating Principles
 
