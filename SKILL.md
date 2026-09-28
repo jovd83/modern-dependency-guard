@@ -211,7 +211,7 @@ Only update it when all of the following are true:
 
 ### Shared memory
 
-If broader cross-agent reuse is needed, integrate with a separate shared-memory skill or platform capability. Do not embed cross-agent infrastructure into this skill.
+If broader cross-agent reuse is needed, use the agent's own memory (for example CLAUDE.md or AGENTS.md) or a platform capability. Do not embed cross-agent infrastructure into this skill.
 
 ### Promotion rules
 
